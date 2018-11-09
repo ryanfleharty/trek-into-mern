@@ -10,6 +10,7 @@ app.use(bodyParser.json());
 app.use(bodyParser({urlextended:true}))
 app.use(cors({
     origin: 'http://localhost:3000',
+    credentials: true,
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }))
 app.use(morgan('short'));
@@ -22,8 +23,12 @@ app.use(session({
 require('./db/db');
 
 const episodeControlla = require('./controllers/episodeController');
+const authController = require('./controllers/authController');
+const usersController = require('./controllers/userController');
 
 app.use('/episodes', episodeControlla);
+app.use('/auth', authController);
+app.use('/users', usersController);
 
 app.listen(9001, ()=>{
     console.log("THE PORT IS OVER 9000!!!!!");

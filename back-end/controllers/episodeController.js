@@ -5,7 +5,7 @@ const Episode = require('../models/Episode');
 
 router.get('/', async (req, res)=>{
     try{
-            const episodes = await Episode.find({});
+        const episodes = await Episode.find({}).populate('creator');
         res.json({
             status: 200,
             data: episodes
@@ -26,8 +26,12 @@ router.get('/:id', async (req, res)=>{
 router.post('/', async (req, res)=>{
     try{
         console.log(req.body);
+        const newEpisode = {
+            ...req.body,
+            creator: req.session.userId
+        }
         console.log("MAKING AN EPISODE OF STAR TREEEEEK");
-        const newepisode = await Episode.create(req.body)
+        const newepisode = await Episode.create(newEpisode).populate('creator');
         res.json({
             data: newepisode,
             status: 200})
@@ -53,6 +57,26 @@ router.delete('/:id', async (req, res)=>{
             data: err
         })
     }
+})
+
+router.put('/:id', async (req, res)=>{
+    try{
+        console.log(req.body);
+        const updatedEpisode = await Episode.findByIdAndUpdate(req.body._id, req.body, {new: true}).populate('creator');
+        console.log(updatedEpisode);
+        res.json({
+            status: 200,
+            data: updatedEpisode
+        })
+    }catch(err){
+        console.log(err);
+        res.json({
+            status: 500,
+            data: err
+        })
+    }
+    
+
 })
 
 

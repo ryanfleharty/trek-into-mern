@@ -27,6 +27,7 @@ export default class EpisodesContainer extends Component {
         e.preventDefault();
         const newEpisode = await fetch("http://localhost:9001/episodes", {
             method: "POST",
+            credentials: 'include',
             body: JSON.stringify(this.state.newEpisode),
             headers: {
                 "Content-Type": "application/json"
@@ -50,14 +51,18 @@ export default class EpisodesContainer extends Component {
         })
     }
     getEpisodes = async () => {
-        const episodes = await fetch("http://localhost:9001/episodes");
+        const episodes = await fetch("http://localhost:9001/episodes", {
+            credentials: 'include'
+        });
         const episodesParsed = await episodes.json();
+        console.log(episodesParsed);
         return episodesParsed;
     }
     deleteEpisode = async(id, e) => {
         console.log("DELETING EPISODE " + id);
         const deleteSuccess = await fetch("http://localhost:9001/episodes/" + id, {
-            method: "DELETE"
+            method: "DELETE",
+            credentials: 'include'
         })
         const deletedParsed = await deleteSuccess.json();
         if(deletedParsed.status === 200){
@@ -68,11 +73,29 @@ export default class EpisodesContainer extends Component {
             })
         }
     }
+    updateEpisode = async (episodeData) => {
+        console.log(episodeData);
+        const updatedEpisode = await fetch('http://localhost:9001/episodes/' + episodeData._id, {
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify(episodeData)
+        })
+        const response = await updatedEpisode.json();
+        console.log(response);
+        this.setState({
+            episodes: this.state.episodes.map((episode)=>{
+                return episode._id === response.data._id ? response.data : episode
+            })
+        })
+    }
     render(){
         return(
             <div>
                 <NewEpisode createEpisode={this.createEpisode} handleNewChange={this.handleNewChange}/>
-                <EpisodesList deleteEpisode = {this.deleteEpisode} episodes={this.state.episodes} />
+                <EpisodesList updateEpisode={this.updateEpisode} deleteEpisode = {this.deleteEpisode} episodes={this.state.episodes} />
             </div>
         )
     }
