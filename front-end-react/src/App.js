@@ -2,35 +2,12 @@ import React, { Component } from 'react';
 import './App.css';
 import AuthGateway from './AuthGateway/AuthGateway';
 import EpisodesContainer from './EpisodesContainer/EpisodesContainer';
-
+import { connect } from 'react-redux';
 class App extends Component {
   constructor(){
     super();
     this.state = {
-      loggedIn: false,
-      currentUser: {
-        username: '',
-        password: ''
-      },
       error: ""
-    }
-  }
-  handleLogin = async (formData) => {
-    const newUser = await fetch("http://localhost:9001/auth/login", {
-      method: "POST",
-      credentials: 'include',
-      body: JSON.stringify(formData),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-    const response = await newUser.json();
-    console.log(response);
-    if(response.status === 200){
-      this.setState({
-        loggedIn: true,
-        currentUser: response.data
-      })
     }
   }
   handleRegister = async (formData) => {
@@ -60,20 +37,24 @@ class App extends Component {
         error: response.data.message
           })
       }
-
     }
   }
   render() {
+    console.log(this.props);
     return (
       <div className="App">
-      { this.state.loggedIn ?
+      { this.props.loggedIn ?
         <EpisodesContainer />
         :
-        <AuthGateway error={this.state.error} handleRegister={this.handleRegister} handleLogin={this.handleLogin}/>
+        <AuthGateway error={this.state.error} handleRegister={this.handleRegister} />
         }
       </div>
     );
   }
 }
-
-export default App;
+const mapStateToProps = (state) => {
+  return{
+    loggedIn : state.auth.loggedIn
+  }
+}
+export default connect(mapStateToProps)(App);

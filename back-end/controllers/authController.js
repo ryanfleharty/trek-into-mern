@@ -9,6 +9,7 @@ router.get('/login', (req, res)=>{
 
 router.post('/login', async (req, res)=>{
     try{
+        console.log("LOGGING IN")
         console.log(req.body);
         const user = await User.findOne({username: req.body.username});
         console.log(user);

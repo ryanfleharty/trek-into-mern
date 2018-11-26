@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
+import { connect } from 'react-redux';
+import { login } from '../reduxStuff/actions/authActions';
 
-export default class AuthGateway extends Component{
+class AuthGateway extends Component{
     constructor(){
         super();
         this.state = {
@@ -36,7 +38,7 @@ export default class AuthGateway extends Component{
     }
     handleLogin = (e) => {
         e.preventDefault();
-        this.props.handleLogin(this.state.loginForm);
+        this.props.login(this.state.loginForm);
     }
     render(){
         return(
@@ -60,3 +62,13 @@ export default class AuthGateway extends Component{
         )
     }
 }
+const mapDispatchToProps = (dispatch) => {
+    return{
+        login: (formData) => { login(dispatch, formData)}
+    }
+}
+const mapStateToProps = (state) => {
+    return{
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(AuthGateway);
