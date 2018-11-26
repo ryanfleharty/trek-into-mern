@@ -26,14 +26,16 @@ router.get('/:id', async (req, res)=>{
 router.post('/', async (req, res)=>{
     try{
         console.log(req.body);
-        const newEpisode = {
+        const episode = {
             ...req.body,
             creator: req.session.userId
         }
         console.log("MAKING AN EPISODE OF STAR TREEEEEK");
-        const newepisode = await Episode.create(newEpisode).populate('creator');
+        const newEpisode = await Episode.create(episode);
+        const response = await Episode.findById(newEpisode._id).populate('creator');
+        console.log(newEpisode);
         res.json({
-            data: newepisode,
+            data: response,
             status: 200})
     }catch(err){
         res.json({

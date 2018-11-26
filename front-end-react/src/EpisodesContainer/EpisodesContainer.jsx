@@ -34,6 +34,7 @@ export default class EpisodesContainer extends Component {
             }
         })
         const newEpisodeParsed = await newEpisode.json();
+        console.log(newEpisodeParsed);
         if(newEpisodeParsed.status === 200){
             document.getElementById("new-episode-form").reset();
             this.setState({

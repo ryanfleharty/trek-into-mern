@@ -66,9 +66,11 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+      { this.state.loggedIn ?
         <EpisodesContainer />
-        {/* <AuthGateway error={this.state.error} handleRegister={this.handleRegister} handleLogin={this.handleLogin}/>
-        } */}
+        :
+        <AuthGateway error={this.state.error} handleRegister={this.handleRegister} handleLogin={this.handleLogin}/>
+        }
       </div>
     );
   }
