@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
-import { login } from '../reduxStuff/actions/authActions';
+import { login, register } from '../reduxStuff/actions/authActions';
 
 class AuthGateway extends Component{
     constructor(){
@@ -26,7 +26,7 @@ class AuthGateway extends Component{
     }
     handleRegister = (e) => {
         e.preventDefault();
-        this.props.handleRegister(this.state.registerForm);
+        this.props.register(this.state.registerForm);
     }
     handleLoginInput = (e) => {
         this.setState({
@@ -64,7 +64,8 @@ class AuthGateway extends Component{
 }
 const mapDispatchToProps = (dispatch) => {
     return{
-        login: (formData) => { login(dispatch, formData)}
+        login: (formData) => { login(dispatch, formData)},
+        register: (formData) => { register(dispatch, formData)}
     }
 }
 const mapStateToProps = (state) => {
