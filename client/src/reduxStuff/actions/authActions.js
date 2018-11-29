@@ -1,5 +1,4 @@
 import { LOGIN } from './actionTypes';
-
 export const login = async(dispatch, formData) => {
     const response = await fetch(`${process.env.REACT_APP_BACKEND_ADDRESS}/auth/login`, {
         credentials: 'include',
